@@ -8,8 +8,8 @@ código do disco> """
     
 class Processo():
     
-    def __init__(self, tempo_inicial, prioridade, tempo_processador,
-                blocos_mem, cod_impressora, scanner, modem,disco):
+    def __init__( self,tempo_inicial, prioridade, tempo_processador,
+                blocos_mem, cod_impressora, scanner, modem,disco,id):
 
         self.tempo_inicial = tempo_inicial
         self.prioridade = prioridade
@@ -19,12 +19,18 @@ class Processo():
         self.scanner = scanner
         self.modem = modem
         self.disco = disco
+        self.id = id
     
     def __repr__(self):
-        return """( TEMP_INI : %s, PRI : %s, T_PRO: %s, BL_MEM: %s,COD_IMP: %s, SCANNER: %s, MODEM: %s, DISCO %s)""" % (self.tempo_inicial, self.prioridade,
-         self.tempo_processador, self.blocos_mem, self.cod_impressora, self.scanner, self.modem, self.disco)
+        return """(ID:  %s, TEMP_INI : %s, PRI : %s, T_PRO: %s, BL_MEM: %s,COD_IMP: %s, SCANNER: %s, MODEM: %s, DISCO %s)"""%(
+            self.id,
+            self.tempo_inicial, self.prioridade,
+            self.tempo_processador, self.blocos_mem,
+            self.cod_impressora, self.scanner, self.modem, self.disco)
     
-            
+    def __lt__(self, other):
+        return self.tempo_inicial < other.tempo_inicial
+
 
 
     
