@@ -1,5 +1,7 @@
 from processos import *
 import operator
+from recursos import *
+from filas import *
 
 dic_processos = {}
 dic_process_id = {}
@@ -19,14 +21,9 @@ def carrega_processos():
         
         processo = Processo(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],id)
 
+        #dicionário de processos por id.
         dic_process_id[id] = processo
         id+=1
-
-        #monta dicionário de prioridade
-        if (line[1] in  dic_processos):
-            dic_processos[line[1]].append( processo )
-        else:
-            dic_processos[line[1]] = [processo]
 
         #monta dicionario de tempo
         if (line[0] in  dic_process_tempo):
@@ -34,42 +31,26 @@ def carrega_processos():
         else:
             dic_process_tempo[line[0]] = [processo]
 
-
-
-
-    print(dic_processos)
     print(dic_process_tempo)
     
     return 
 
 
 def simula_processos():
-
-
-    #cria lista de processos possíveis.
-    lis_prio = [sorted(dic_processos.get(0,[])),sorted(dic_processos.get(1,[])),sorted(dic_processos.get(2,[])),sorted(dic_processos.get(3,[]))]
-    
+   
     #inicializa dispositivos.
-    scanner = False
-    printer1 = False
-    printer2 = False
-    modem = False
-    sata1 = False
-    sata2 = False  
+    recur = Recursos()
 
-    #filas de prioridade
-    #to-do: refatorar essas filas, muito confuso e trabalhoso.
-    fila_0 = []
-    fila_1 = []
-    fila_2 = []
-    fila_3 = []
+    #inicializa filas
 
+    filas = Filas()
 
     log_executados = []
 
     tempo_atual = 0
-
     processo_atual = None
+
+
 
     while( 1 ):
 
@@ -77,64 +58,57 @@ def simula_processos():
         if(tempo_atual in  dic_process_tempo):
             for elem in dic_process_tempo[tempo_atual]:
                 #trata os itens que foram encontrados na fila de prioridade.
-                if (elem.prioridade == 0 ):
-                    fila_0.append(elem.id)
-                elif (elem.prioridade == 1):
-                    fila_1.append(elem.id)
-                elif (elem.prioridade == 2):
-                    fila_2.append(elem.id)
-                elif (elem.prioridade == 3):
-                    fila_3.append(elem.id)
-        
-        #encontra o processo atual a ser executado.
-        fila_atual = None
-        if (processo_atual is None):
-            # se nenhum processo está sendo executado, executa um.
-            if (len(fila_0) > 0 ):
-                processo_atual = fila_0[0]
-                fila_atual = 0
-            elif( len(fila_1) > 0 ):
-                processo_atual = fila_1[0]
-                fila_atual = 1
-            elif( len(fila_2) > 0 ):
-                processo_atual = fila_2[0]
-                fila_atual = 2
-            elif( len(fila_3) > 0 ):
-                processo_atual = fila_3[0]
-                fila_atual = 3
-        else :
-            candidato = None
-            if (len(fila_0) > 0 ):
-                candidato = fila_0[0]
-            elif( len(fila_1) > 0 ):
-                candidato = fila_1[0]
-            elif( len(fila_2) > 0 ):
-                candidato = fila_2[0]
-            elif( len(fila_3) > 0 ):
-                candidato = fila_3[0]    
-            if (dic_process_id[processo_atual] > dic_process_id[candidato]):
-                # a ideia aqui é aumentar a prioridade do processo que era atual ?
-                processo_atual = candidato
+                filas.insere_processo(elem)
+    
+        # #encontra o processo atual a ser executado.
+        # fila_atual = None
+        # if (processo_atual is None):
+        #     # se nenhum processo está sendo executado, executa um.
+        #     if (len(fila_0) > 0 ):
+        #         processo_atual = fila_0[0]
+        #         fila_atual = 0
+        #     elif( len(fila_1) > 0 ):
+        #         processo_atual = fila_1[0]
+        #         fila_atual = 1
+        #     elif( len(fila_2) > 0 ):
+        #         processo_atual = fila_2[0]
+        #         fila_atual = 2
+        #     elif( len(fila_3) > 0 ):
+        #         processo_atual = fila_3[0]
+        #         fila_atual = 3
+        # else :
+        #     candidato = None
+        #     if (len(fila_0) > 0 ):
+        #         candidato = fila_0[0]
+        #     elif( len(fila_1) > 0 ):
+        #         candidato = fila_1[0]
+        #     elif( len(fila_2) > 0 ):
+        #         candidato = fila_2[0]
+        #     elif( len(fila_3) > 0 ):
+        #         candidato = fila_3[0]    
+        #     if (dic_process_id[processo_atual] > dic_process_id[candidato]):
+        #         # a ideia aqui é aumentar a prioridade do processo que era atual ?
+        #         processo_atual = candidato
 
-        #print(processo_atual)
-        #executa o processo. diminui o tempo do processo atual e etc. se acabou tira ele da fila.
-        if (processo_atual is not None):
-            print('antes de executar',dic_process_id[processo_atual].tempo_processador)
-            dic_process_id[processo_atual].tempo_processador -= 1
-            print('apos executar',dic_process_id[processo_atual].tempo_processador)
+        # #print(processo_atual)
+        # #executa o processo. diminui o tempo do processo atual e etc. se acabou tira ele da fila.
+        # if (processo_atual is not None):
+        #     print('antes de executar',dic_process_id[processo_atual].tempo_processador)
+        #     dic_process_id[processo_atual].tempo_processador -= 1
+        #     print('apos executar',dic_process_id[processo_atual].tempo_processador)
 
-            if(dic_process_id[processo_atual].tempo_processador == 0):
-                if (fila_atual == 0):
-                    fila_0 = [1:]
-                if (fila_atual == 1):
-                    fila_1 = [1:]
-                if (fila_atual == 2):
-                    fila_2 = [1:]
-                if (fila_atual == 3):
-                    fila_3 = [1:]
+        #     # if(dic_process_id[processo_atual].tempo_processador == 0):
+        #     #     if (fila_atual == 0):
+        #     #         fila_0 = [1:]
+        #     #     if (fila_atual == 1):
+        #     #         fila_1 = [1:]
+        #     #     if (fila_atual == 2):
+        #     #         fila_2 = [1:]
+        #     #     if (fila_atual == 3):
+        #     #         fila_3 = [1:]
             
 
-            dic_ 
+        #     # dic_ 
                 
 
         # implementar condição de saida.
@@ -146,7 +120,7 @@ def simula_processos():
         if(tempo_atual > 10):
             break
 
-    print(fila_0 , fila_1,fila_2,fila_3)
+    print(filas)
 
 
 

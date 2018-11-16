@@ -1,4 +1,15 @@
-"""memoria.py"
-TAM_MEMORIA = 1024
-TAM_MEM_TEMPO_REAL = 64
-TAM_MEM_USUARIO = TAM_MEMORIA - TAM_MEM_TEMPO_REAL
+"""memoria.py"""
+
+class Memoria():
+
+
+    
+    def __init__():
+
+        self.tam_mem = 1024
+        self.tam_mem_real = 64
+        
+        self.tam_mem_usu = self.tam_mem - self.tam_mem_real
+    
+    
+    def verificar_espaco():
