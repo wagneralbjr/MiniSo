@@ -1,16 +1,20 @@
+from memoria import *
+
+
 class Filas():
 
-    def __init__(self):
+    def __init__(self, dic_process_id):
 
-        self.filas = [[],[],[],[]]
-
+        self.filas = [[],[],[],[]] 
+        self.dic_process_id = dic_process_id
+        self.memoria = Memoria()
 
 
         return
 
     def insere_processo(self, processo) :
         ## insere um processo de acordo com sua prioridade na lista 
-
+        """verifico aqui se há espaço para ser executado ou na hora de executar? """
         prioridade = processo.prioridade
         if (prioridade == 0 ):
             self.filas[0].append(processo.id)
@@ -24,9 +28,55 @@ class Filas():
 
         return
     
-    def remove_processo(self):
-        ## remove  um processo de acordo com sua prioridade na lista 
-        pass
+    
+
+    # debugar essa parte.
+
+    def executa_processo(self):
+        """ verifica qual é o processoa  ser executado.
+            e executa o mesmo.
+            se acabar o tempo, apaga ele da fila.
+        """
+
+        def _executa( id , fila_atual):
+            
+            if ( self.dic_process_id[id].tempo_processador > 0):
+                self.dic_process_id[id].tempo_processador -= 1
+
+            if (self.dic_process_id[id].tempo_processador == 0 ) :
+                self.remove_processo(fila_atual)
+            else:
+                #aumenta prioridade se não for processo de tempo real.
+                
+                if (self.dic_process_id[id].prioridade > 1):
+                    # se a prioridade é maior q 1. devemos remover da fila atual
+                    # e inserir uma fila abaixo da que ele está.
+
+                    self.remove_processo(fila_atual)
+                    self.dic_process_id[id].prioridade -= 1
+                    self.insere_processo(self.dic_process_id[id])
+                    
+                    
+                elif ( self.dic_process_id[id].prioridade == 1):
+                    # se é de prioridade 1, simplesmente remove do início e adiciona no final.
+                    self.remove_processo(fila_atual)                
+                    self.insere_processo(self.dic_process_id[id])
+
+                
+        for i in range(0,4):
+            if (len(self.filas[i]) > 0):
+                _executa(self.filas[i][0] , i)
+                return
+
+
+        return
+
+
+    def remove_processo(self, fila_atual):
+        ## remove  um processo de acordo com sua fila
+        self.filas[fila_atual] = self.filas[fila_atual][1:]
+               
+        return
 
     def aumenta_prioridade(self):
 

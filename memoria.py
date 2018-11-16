@@ -4,7 +4,7 @@ class Memoria():
 
 
     
-    def __init__():
+    def __init__(self):
 
         self.tam_mem = 1024
         self.tam_mem_real = 64
@@ -13,3 +13,5 @@ class Memoria():
     
     
     def verificar_espaco():
+
+        pass

@@ -43,23 +43,28 @@ def simula_processos():
 
     #inicializa filas
 
-    filas = Filas()
+    filas = Filas(dic_process_id)
 
     log_executados = []
 
-    tempo_atual = 0
+    tempo_atual = 1
     processo_atual = None
 
 
 
     while( 1 ):
-
+        
+        
         #verifica se existem items chegando na fila de prioridade.
         if(tempo_atual in  dic_process_tempo):
             for elem in dic_process_tempo[tempo_atual]:
                 #trata os itens que foram encontrados na fila de prioridade.
                 filas.insere_processo(elem)
-    
+
+        print(tempo_atual,'\t',filas)
+        filas.executa_processo()
+
+        
         # #encontra o processo atual a ser executado.
         # fila_atual = None
         # if (processo_atual is None):
@@ -116,11 +121,12 @@ def simula_processos():
         
 
         #aumenta o tempo.
+        
         tempo_atual += 1
-        if(tempo_atual > 10):
+        if(tempo_atual > 50):
             break
-
-    print(filas)
+    print(tempo_atual,'\t',filas)
+    
 
 
 
