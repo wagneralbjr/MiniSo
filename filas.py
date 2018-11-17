@@ -8,6 +8,7 @@ class Filas():
         self.filas = [[],[],[],[]] 
         self.dic_process_id = dic_process_id
         self.memoria = Memoria()
+        self.ultimo_executado = None
 
 
         return
@@ -40,29 +41,32 @@ class Filas():
 
         def _executa( id , fila_atual):
             
+            self.ultimo_executado = id
+
             if ( self.dic_process_id[id].tempo_processador > 0):
                 self.dic_process_id[id].tempo_processador -= 1
 
             if (self.dic_process_id[id].tempo_processador == 0 ) :
                 self.remove_processo(fila_atual)
-            else:
-                #aumenta prioridade se não for processo de tempo real.
+            
+            # else:
+            #     #aumenta prioridade se não for processo de tempo real.
                 
-                if (self.dic_process_id[id].prioridade > 1):
-                    # se a prioridade é maior q 1. devemos remover da fila atual
-                    # e inserir uma fila abaixo da que ele está.
+            #     if (self.dic_process_id[id].prioridade > 1):
+            #         # se a prioridade é maior q 1. devemos remover da fila atual
+            #         # e inserir uma fila abaixo da que ele está.
 
-                    self.remove_processo(fila_atual)
-                    self.dic_process_id[id].prioridade -= 1
-                    self.insere_processo(self.dic_process_id[id])
+            #         self.remove_processo(fila_atual)
+            #         self.dic_process_id[id].prioridade -= 1
+            #         self.insere_processo(self.dic_process_id[id])
                     
                     
-                elif ( self.dic_process_id[id].prioridade == 1):
-                    # se é de prioridade 1, simplesmente remove do início e adiciona no final.
-                    self.remove_processo(fila_atual)                
-                    self.insere_processo(self.dic_process_id[id])
+            #     elif ( self.dic_process_id[id].prioridade == 1):
+            #         # se é de prioridade 1, simplesmente remove do início e adiciona no final.
+            #         self.remove_processo(fila_atual)                
+            #         self.insere_processo(self.dic_process_id[id])
 
-                
+        self.ultimo_executado  = None   
         for i in range(0,4):
             if (len(self.filas[i]) > 0):
                 _executa(self.filas[i][0] , i)
@@ -79,6 +83,7 @@ class Filas():
         return
 
     def aumenta_prioridade(self):
+        
 
         pass
     

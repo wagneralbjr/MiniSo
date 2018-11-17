@@ -52,7 +52,7 @@ def simula_processos():
 
 
 
-    while( 1 ):
+    while( True ):
         
         
         #verifica se existem items chegando na fila de prioridade.
@@ -61,71 +61,18 @@ def simula_processos():
                 #trata os itens que foram encontrados na fila de prioridade.
                 filas.insere_processo(elem)
 
-        print(tempo_atual,'\t',filas)
+        print(tempo_atual,'\t',filas ,'UE: ',end='')
         filas.executa_processo()
-
-        
-        # #encontra o processo atual a ser executado.
-        # fila_atual = None
-        # if (processo_atual is None):
-        #     # se nenhum processo está sendo executado, executa um.
-        #     if (len(fila_0) > 0 ):
-        #         processo_atual = fila_0[0]
-        #         fila_atual = 0
-        #     elif( len(fila_1) > 0 ):
-        #         processo_atual = fila_1[0]
-        #         fila_atual = 1
-        #     elif( len(fila_2) > 0 ):
-        #         processo_atual = fila_2[0]
-        #         fila_atual = 2
-        #     elif( len(fila_3) > 0 ):
-        #         processo_atual = fila_3[0]
-        #         fila_atual = 3
-        # else :
-        #     candidato = None
-        #     if (len(fila_0) > 0 ):
-        #         candidato = fila_0[0]
-        #     elif( len(fila_1) > 0 ):
-        #         candidato = fila_1[0]
-        #     elif( len(fila_2) > 0 ):
-        #         candidato = fila_2[0]
-        #     elif( len(fila_3) > 0 ):
-        #         candidato = fila_3[0]    
-        #     if (dic_process_id[processo_atual] > dic_process_id[candidato]):
-        #         # a ideia aqui é aumentar a prioridade do processo que era atual ?
-        #         processo_atual = candidato
-
-        # #print(processo_atual)
-        # #executa o processo. diminui o tempo do processo atual e etc. se acabou tira ele da fila.
-        # if (processo_atual is not None):
-        #     print('antes de executar',dic_process_id[processo_atual].tempo_processador)
-        #     dic_process_id[processo_atual].tempo_processador -= 1
-        #     print('apos executar',dic_process_id[processo_atual].tempo_processador)
-
-        #     # if(dic_process_id[processo_atual].tempo_processador == 0):
-        #     #     if (fila_atual == 0):
-        #     #         fila_0 = [1:]
-        #     #     if (fila_atual == 1):
-        #     #         fila_1 = [1:]
-        #     #     if (fila_atual == 2):
-        #     #         fila_2 = [1:]
-        #     #     if (fila_atual == 3):
-        #     #         fila_3 = [1:]
-            
-
-        #     # dic_ 
-                
-
-        # implementar condição de saida.
-
+        print(filas.ultimo_executado)
         
 
-        #aumenta o tempo.
-        
+
+        #passa o tempo na simulação        
         tempo_atual += 1
         if(tempo_atual > 50):
             break
-    print(tempo_atual,'\t',filas)
+    print('---------------------')
+    print(tempo_atual,'\t',filas,'UE:',filas.ultimo_executado)
     
 
 
