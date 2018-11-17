@@ -20,6 +20,7 @@ class Processo():
         self.modem = modem
         self.disco = disco
         self.id = id
+        self.tempo_ultima_execucao = 0
     
     def __repr__(self):
         return """(ID:  %s, TEMP_INI : %s, PRI : %s, T_PRO: %s, BL_MEM: %s,COD_IMP: %s, SCANNER: %s, MODEM: %s, DISCO %s)"""%(

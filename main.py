@@ -64,10 +64,8 @@ def simula_processos():
         print(tempo_atual,'\t',filas ,'UE: ',end='')
         filas.executa_processo()
         print(filas.ultimo_executado)
-        
+        filas.aumenta_prioridade()
 
-
-        #passa o tempo na simulação        
         tempo_atual += 1
         if(tempo_atual > 50):
             break

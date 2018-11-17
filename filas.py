@@ -9,7 +9,9 @@ class Filas():
         self.dic_process_id = dic_process_id
         self.memoria = Memoria()
         self.ultimo_executado = None
-
+        
+        
+        self.aging = 5 # tanto de tempo para aumentar a prioridade.
 
         return
 
@@ -28,7 +30,6 @@ class Filas():
 
 
         return
-    
     
 
     # debugar essa parte.
@@ -49,22 +50,6 @@ class Filas():
             if (self.dic_process_id[id].tempo_processador == 0 ) :
                 self.remove_processo(fila_atual)
             
-            # else:
-            #     #aumenta prioridade se não for processo de tempo real.
-                
-            #     if (self.dic_process_id[id].prioridade > 1):
-            #         # se a prioridade é maior q 1. devemos remover da fila atual
-            #         # e inserir uma fila abaixo da que ele está.
-
-            #         self.remove_processo(fila_atual)
-            #         self.dic_process_id[id].prioridade -= 1
-            #         self.insere_processo(self.dic_process_id[id])
-                    
-                    
-            #     elif ( self.dic_process_id[id].prioridade == 1):
-            #         # se é de prioridade 1, simplesmente remove do início e adiciona no final.
-            #         self.remove_processo(fila_atual)                
-            #         self.insere_processo(self.dic_process_id[id])
 
         self.ultimo_executado  = None   
         for i in range(0,4):
@@ -84,8 +69,27 @@ class Filas():
 
     def aumenta_prioridade(self):
         
+        #print(self.filas)
+        for filas in self.filas:
+            for processo in filas:
+                pid = processo
+                #print('pid',pid,'\t','ultimo',self.ultimo_executado)
+                if (pid != self.ultimo_executado):
+                    self.dic_process_id[pid].tempo_ultima_execucao += 1
 
-        pass
+                    # se tiver passado de 10 sem executar aumenta em 1 a prioridade.
+                    if (self.dic_process_id[pid].tempo_ultima_execucao >= self.aging):
+                        if (self.dic_process_id[pid].prioridade > 1):
+                            prio = self.dic_process_id[pid].prioridade 
+
+                            #remove o processo da fila antiga
+                            self.filas[prio]  =  [x for x in self.filas[prio] if x != pid]
+                            self.dic_process_id[pid].prioridade -= 1
+                            self.insere_processo(self.dic_process_id[pid])
+                            self.dic_process_id[pid].tempo_ultima_execucao = 0
+                else:
+                    self.dic_process_id[pid].tempo_ultima_execucao = 0
+        return
     
 
     def __repr__(self):
