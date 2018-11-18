@@ -7,7 +7,6 @@ dic_processos = {}
 dic_process_id = {}
 dic_process_tempo = {}
 
-
 def carrega_processos():
 
     file = open('processes.txt')
@@ -17,8 +16,7 @@ def carrega_processos():
     for line in file:
         line = line[:-1].split(',')
         line = [int(x) for x in line]
-        #print(line)
-        
+
         processo = Processo(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],id)
 
         #dicionário de processos por id.
@@ -33,7 +31,7 @@ def carrega_processos():
 
     print(dic_process_tempo)
     
-    return 
+    return  
 
 
 def simula_processos():
@@ -50,25 +48,43 @@ def simula_processos():
     tempo_atual = 1
     processo_atual = None
 
-
-
     while( True ):
-        
-        
         #verifica se existem items chegando na fila de prioridade.
         if(tempo_atual in  dic_process_tempo):
             for elem in dic_process_tempo[tempo_atual]:
                 #trata os itens que foram encontrados na fila de prioridade.
-                filas.insere_processo(elem)
+
+                # valida se possuem os recursos necessários disponíveis para ser executado.
+                if (recur.valida_recursos(elem)):
+                    filas.insere_processo(elem)
+                else:
+                    elem.tempo_inicial += 1
+                    #verifica se já existe uma lista. se não cria uma.                    
+                    try:
+                        dic_process_tempo[tempo_atual + 1].append(elem)
+                    except:
+                        dic_process_tempo[tempo_atual + 1] = [elem]
+                           
+        
 
         print(tempo_atual,'\t',filas ,'UE: ',end='')
-        filas.executa_processo()
+        #print(recur)
+
+        if filas.executa_processo() :
+            #print('entrou para desalocar',filas.dic_process_id[filas.ultimo_executado])
+            recur.desaloca_recursos(filas.dic_process_id[filas.ultimo_executado])
+        else:
+            pass
+
         print(filas.ultimo_executado)
         filas.aumenta_prioridade()
 
         tempo_atual += 1
-        if(tempo_atual > 50):
+        if(filas.qtd_proc_fin == filas.qtd_processos):
             break
+
+        # if(tempo_atual > 15):
+        #     break
     print('---------------------')
     print(tempo_atual,'\t',filas,'UE:',filas.ultimo_executado)
     

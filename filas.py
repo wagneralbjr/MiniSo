@@ -10,8 +10,9 @@ class Filas():
         self.memoria = Memoria()
         self.ultimo_executado = None
         
-        
-        self.aging = 5 # tanto de tempo para aumentar a prioridade.
+        self.qtd_processos = len(dic_process_id) # qtd de processos.
+        self.aging = 15 # tanto de tempo para aumentar a prioridade.
+        self.qtd_proc_fin = 0
 
         return
 
@@ -32,7 +33,7 @@ class Filas():
         return
     
 
-    # debugar essa parte.
+    
 
     def executa_processo(self):
         """ verifica qual é o processoa  ser executado.
@@ -41,24 +42,28 @@ class Filas():
         """
 
         def _executa( id , fila_atual):
-            
+            """retorna true se um processo acabou. Falso se não. """
             self.ultimo_executado = id
 
             if ( self.dic_process_id[id].tempo_processador > 0):
                 self.dic_process_id[id].tempo_processador -= 1
-
+                
             if (self.dic_process_id[id].tempo_processador == 0 ) :
+                self.qtd_proc_fin += 1
                 self.remove_processo(fila_atual)
-            
+
+                # retorna se acabou
+                return True 
+            #retorna q não acabou
+            return False
 
         self.ultimo_executado  = None   
         for i in range(0,4):
             if (len(self.filas[i]) > 0):
-                _executa(self.filas[i][0] , i)
-                return
-
-
-        return
+                acabou  =_executa(self.filas[i][0] , i)
+                return acabou
+            
+        return False
 
 
     def remove_processo(self, fila_atual):
@@ -90,7 +95,9 @@ class Filas():
                 else:
                     self.dic_process_id[pid].tempo_ultima_execucao = 0
         return
-    
+
+
+
 
     def __repr__(self):
 
