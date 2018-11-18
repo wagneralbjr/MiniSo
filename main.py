@@ -58,6 +58,8 @@ def simula_processos():
                 if (recur.valida_recursos(elem)):
                     filas.insere_processo(elem)
                 else:
+                    """ Se o recurso não pode ser utilizado naquele momento, modifica o tempo inicial do
+                    processo e faz com que ele seja inicializado mais tarde.""" 
                     elem.tempo_inicial += 1
                     #verifica se já existe uma lista. se não cria uma.                    
                     try:
