@@ -11,7 +11,7 @@ class Filas():
         self.ultimo_executado = None
         
         self.qtd_processos = len(dic_process_id) # qtd de processos.
-        self.aging = 15 # tanto de tempo para aumentar a prioridade.
+        self.aging = 5 # tanto de tempo para aumentar a prioridade.
         self.qtd_proc_fin = 0
 
         return

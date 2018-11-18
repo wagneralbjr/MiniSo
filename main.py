@@ -2,6 +2,7 @@ from processos import *
 import operator
 from recursos import *
 from filas import *
+from memoria import *
 
 dic_processos = {}
 dic_process_id = {}
@@ -42,6 +43,7 @@ def simula_processos():
     #inicializa filas
 
     filas = Filas(dic_process_id)
+    memory = Memoria()
 
     log_executados = []
 
@@ -55,7 +57,7 @@ def simula_processos():
                 #trata os itens que foram encontrados na fila de prioridade.
 
                 # valida se possuem os recursos necessários disponíveis para ser executado.
-                if (recur.valida_recursos(elem)):
+                if (recur.valida_recursos(elem) and memory.verificar_espaco(elem)):
                     filas.insere_processo(elem)
                 else:
                     """ Se o recurso não pode ser utilizado naquele momento, modifica o tempo inicial do
@@ -67,7 +69,7 @@ def simula_processos():
                     except:
                         dic_process_tempo[tempo_atual + 1] = [elem]
                            
-        
+
 
         print(tempo_atual,'\t',filas ,'UE: ',end='')
         #print(recur)
@@ -75,12 +77,14 @@ def simula_processos():
         if filas.executa_processo() :
             #print('entrou para desalocar',filas.dic_process_id[filas.ultimo_executado])
             recur.desaloca_recursos(filas.dic_process_id[filas.ultimo_executado])
+            memory.desaloca_memoria(filas.dic_process_id[filas.ultimo_executado])
         else:
             pass
 
         print(filas.ultimo_executado)
         filas.aumenta_prioridade()
-
+        #print(memory.blocos_kernel)
+        #print(memory.blocos_usuario)
         tempo_atual += 1
         if(filas.qtd_proc_fin == filas.qtd_processos):
             break

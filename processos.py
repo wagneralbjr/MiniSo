@@ -14,13 +14,17 @@ class Processo():
         self.tempo_inicial = tempo_inicial
         self.prioridade = prioridade
         self.tempo_processador = tempo_processador
-        self.blocos_mem = blocos_mem
+        
+        self.mem_offset = None # offset da memoria.
+        self.blocos_mem = blocos_mem # blocos de memoria necessários.
         self.cod_impressora = cod_impressora
         self.scanner = scanner
         self.modem = modem
         self.disco = disco
         self.id = id
         self.tempo_ultima_execucao = 0
+
+        
     
     def __repr__(self):
         return """(ID:  %s, TEMP_INI : %s, PRI : %s, T_PRO: %s, BL_MEM: %s,COD_IMP: %s, SCANNER: %s, MODEM: %s, DISCO %s)"""%(
