@@ -3,6 +3,7 @@ import operator
 from recursos import *
 from filas import *
 from memoria import *
+from arquivos import *
 
 dic_processos = {}
 dic_process_id = {}
@@ -45,7 +46,7 @@ def simula_processos():
     filas = Filas(dic_process_id)
     memory = Memoria()
 
-    log_executados = []
+    log_executados = {}
 
     tempo_atual = 1
     processo_atual = None
@@ -74,6 +75,10 @@ def simula_processos():
         print(tempo_atual,'\t',filas ,'UE: ',end='')
         #print(recur)
 
+        #guarda o log dos executados.
+        log_executados[tempo_atual] = filas.log_filas()
+
+        #executa o processo com mais prioridade.
         if filas.executa_processo() :
             #print('entrou para desalocar',filas.dic_process_id[filas.ultimo_executado])
             recur.desaloca_recursos(filas.dic_process_id[filas.ultimo_executado])
@@ -83,6 +88,8 @@ def simula_processos():
 
         print(filas.ultimo_executado)
         filas.aumenta_prioridade()
+
+        
         #print(memory.blocos_kernel)
         #print(memory.blocos_usuario)
         tempo_atual += 1
@@ -93,7 +100,9 @@ def simula_processos():
         #     break
     print('---------------------')
     print(tempo_atual,'\t',filas,'UE:',filas.ultimo_executado)
-    
+    print(log_executados)
+
+    return log_executados
 
 
 
@@ -102,4 +111,9 @@ if __name__ == "__main__":
     #monta lista de processos
 
     carrega_processos()
-    simula_processos()
+    log_executados = simula_processos()
+
+    # simula arquivos.
+    arq = Arquivos(dic_process_id,log_executados)
+    arq.le_disco()
+    

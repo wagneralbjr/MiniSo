@@ -97,6 +97,14 @@ class Filas():
         return
 
 
+    def log_filas(self):
+        
+        log = set()
+        for filas in self.filas:
+            for pid in filas:
+                log.add(pid)
+
+        return log if len(log) > 0 else set([None])
 
 
     def __repr__(self):
