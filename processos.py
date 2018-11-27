@@ -15,6 +15,8 @@ class Processo():
         self.prioridade = prioridade
         self.tempo_processador = tempo_processador
         
+        self.tempo_arquivo = tempo_processador
+
         self.mem_offset = None # offset da memoria.
         self.blocos_mem = blocos_mem # blocos de memoria necessários.
         self.cod_impressora = cod_impressora
