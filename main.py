@@ -19,7 +19,16 @@ def carrega_processos():
         line = line[:-1].split(',')
         line = [int(x) for x in line]
 
+        
         processo = Processo(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7],id)
+        prio = int(line[1])
+        memoria  = int(line[3])
+        print(prio, memoria)
+        if (prio == 0 and memoria > 64):
+            continue 
+        if (prio == 1 and memoria > 960):
+            continue
+        
 
         #dicionário de processos por id.
         dic_process_id[id] = processo
@@ -96,8 +105,8 @@ def simula_processos():
         if(filas.qtd_proc_fin == filas.qtd_processos):
             break
 
-        # if(tempo_atual > 15):
-        #     break
+        if(tempo_atual > 15):
+            break
     print('---------------------')
     print(tempo_atual,'\t',filas,'UE:',filas.ultimo_executado)
     print(log_executados)

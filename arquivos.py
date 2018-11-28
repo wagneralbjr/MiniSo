@@ -79,7 +79,7 @@ class Arquivos():
                 nome_arquivo = nome_arquivo.strip()
 
                 # print(pid, cod_operacao, nome_arquivo)
-
+                
                 # prioridade do processo.
                 processo = self.dic_processos_id[pid]
                 # print('encontrou o processo ', processo)
